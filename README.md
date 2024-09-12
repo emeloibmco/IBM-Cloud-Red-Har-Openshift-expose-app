@@ -3,7 +3,7 @@
 ## Route 
 ## Ingress 
 ## Load banlancer
-'''
+```
 apiVersion: v1
 kind: Service
 metadata:
@@ -20,7 +20,7 @@ spec:
       port: 80      
       targetPort: <target port>  
   externalTrafficPolicy: Cluster 
-'''
-'''
+```
+```
 oc apply -f lb.yaml 
-'''
+```

@@ -183,7 +183,7 @@ Verifica el provisionamiento del Load Balancer.
 - Excelente para aplicaciones que necesitan manejar tráfico a gran escala.
 - Permite balancear las cargas entre réplicas, mejorando la disponibilidad.
   
-Doc oficial: [IBM Cloud Load Balancer](https://cloud.ibm.com/docs/openshift?topic=openshift-load-balancer)
+Doc oficial: [IBM Cloud Load Balancer](https://cloud.ibm.com/docs/openshift?topic=openshift-setup_vpc_alb)
 
 ---
 

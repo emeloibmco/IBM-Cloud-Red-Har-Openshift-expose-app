@@ -1,6 +1,6 @@
-# Exponer Aplicaciones en OpenShift (IBM Cloud VPC)
+# Exponer Aplicaciones en OpenShift (IBM Cloud VPC) ☁
 
-# Índice
+## Índice  📰
 
 1. [Crear Nuevo Proyecto](#crear-nuevo-proyecto)
 2. [Crear Aplicativo](#crear-aplicativo)

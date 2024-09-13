@@ -55,7 +55,7 @@ oc expose service <service_name>
 ```yaml
 tls:
   termination: edge
-  insecureEdgeTerminationPolicy: Allow
+  insecureEdgeTerminationPolicy: Redirect
 ```
 
 ![image](https://github.com/user-attachments/assets/8d101169-d459-4269-9853-809db482770c)

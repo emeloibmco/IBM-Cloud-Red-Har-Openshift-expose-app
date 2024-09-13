@@ -1,5 +1,17 @@
 # Exponer Aplicaciones en OpenShift (IBM Cloud VPC)
 
+# Índice
+
+1. [Crear Nuevo Proyecto](#crear-nuevo-proyecto)
+2. [Crear Aplicativo](#crear-aplicativo)
+3. [Route](#route)
+   - [Configurar TLS para Route](#configurar-tls-para-route)
+4. [Ingress](#ingress)
+   - [Verificar Dominios Válidos del Clúster](#verificar-dominios-válidos-del-clúster)
+   - [Crear Ingress Resource](#crear-ingress-resource)
+5. [Load Balancer](#load-balancer)
+
+
 ## Crear Nuevo Proyecto
 
 Inicia creando un nuevo proyecto en tu clúster OpenShift.

@@ -10,6 +10,7 @@
    - [Verificar Dominios Válidos del Clúster](#verificar-dominios-válidos-del-clúster)
    - [Crear Ingress Resource](#crear-ingress-resource)
 5. [Load Balancer](#load-balancer)
+6. [Exponer Aplicación mediante load balancer aplicando SSL por ingress con CA por Secret Manager](#exponer-aplicación-mediante-load-balancer-aplicando-ssl-por-ingress-con-ca-por-secret-manager)
 
 
 ## Crear Nuevo Proyecto
@@ -54,7 +55,7 @@ oc project <project_name>
 oc expose deployment <deployment_name> --name=<service_name> --port=<port_number> --target-port=<target_port_number>
 ```
 
-#### Crear Route
+#### Route
 
 Exponemos el servicio mediante un Route. Este crea una URL para que accedan los usuarios externos.
 
@@ -78,7 +79,7 @@ tls:
   
 ---
 
-### Exponer Aplicación mediante Ingress
+### Ingress
 
 **Descripción**: Utilizado cuando necesitas tener un control más granular sobre las reglas de tráfico de red. Te permite definir subdominios, reglas de path y opciones avanzadas de red, ideales para aplicaciones más complejas.
 
@@ -144,7 +145,7 @@ Doc oficial: [IBM Cloud Ingress](https://cloud.ibm.com/docs/openshift?topic=open
 
 ---
 
-### Exponer Aplicación mediante Load Balancer
+### Load Balancer
 
 **Descripción**: Ideal para manejar grandes cantidades de tráfico. Distribuye las solicitudes de los usuarios entre diferentes réplicas de tu aplicación, mejorando la disponibilidad y escalabilidad.
 
@@ -202,14 +203,6 @@ Verifica el provisionamiento del Load Balancer.
   
 Doc oficial: [IBM Cloud Load Balancer](https://cloud.ibm.com/docs/openshift?topic=openshift-setup_vpc_alb)
 
----
-
-## Comparación de Métodos de Exposición
-
-- **Route**: Ideal para aplicaciones pequeñas o rápidas que requieren acceso público sin necesidad de configuraciones avanzadas.
-- **Ingress**: Útil para aplicaciones más complejas que requieren gestionar múltiples rutas o dominios bajo un mismo clúster.
-- **Load Balancer**: La mejor opción para aplicaciones con grandes volúmenes de tráfico y que requieren alta disponibilidad y escalabilidad.
-
 ## Exponer Aplicación mediante load balancer aplicando SSL por ingress con CA por Secret Manager
 
 ### Agregar persmisos sobre el secret group al access group
@@ -251,7 +244,7 @@ ibmcloud oc ingress instance register --cluster <cluster-id> --crn <secret-manag
 Importar secret del certificado al cluster
 
 ```sh
-	ibmcloud oc ingress secret create --cluster <cluster_name_or_ID> --cert-crn <crn> --name <secret_name> --namespace openshift-ingress
+	ibmcloud oc ingress secret create --cluster <cluster_name_or_ID> --cert-crn <crn> --name <secret_name> --namespace <app-ns>
 ```
 
 #### Crear Load Balancer
@@ -318,3 +311,10 @@ Aplica la configuración:
 ```bash
 oc apply -f ingress.yaml
 ```
+---
+
+## Comparación de Métodos de Exposición
+
+- **Route**: Ideal para aplicaciones pequeñas o rápidas que requieren acceso público sin necesidad de configuraciones avanzadas.
+- **Ingress**: Útil para aplicaciones más complejas que requieren gestionar múltiples rutas o dominios bajo un mismo clúster.
+- **Load Balancer**: La mejor opción para aplicaciones con grandes volúmenes de tráfico y que requieren alta disponibilidad y escalabilidad.

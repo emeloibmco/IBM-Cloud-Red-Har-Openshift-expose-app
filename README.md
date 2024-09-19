@@ -10,7 +10,7 @@
    - [Verificar Dominios Válidos del Clúster](#verificar-dominios-válidos-del-clúster)
    - [Crear Ingress Resource](#crear-ingress-resource)
 5. [Load Balancer](#load-balancer)
-6. [Exponer Aplicación mediante load balancer aplicando SSL por ingress con CA por Secret Manager](#exponer-aplicación-mediante-load-balancer-aplicando-ssl-por-ingress-con-ca-por-secret-manager)
+6. [Exponer Aplicación mediante load balancer aplicando SSL por ingress con CA por Secret Manager](#exponer-aplicación-mediante-load-balancer-aplicando-ssl-por-ingress-con-ca-en-secret-manager)
 
 
 ## Crear Nuevo Proyecto
@@ -203,7 +203,7 @@ Verifica el provisionamiento del Load Balancer.
   
 Doc oficial: [IBM Cloud Load Balancer](https://cloud.ibm.com/docs/openshift?topic=openshift-setup_vpc_alb)
 
-## Exponer Aplicación mediante load balancer aplicando SSL por ingress con CA por Secret Manager
+## Exponer Aplicación mediante load balancer aplicando SSL por ingress con CA en Secret Manager
 
 ### Agregar persmisos sobre el secret group al access group
 

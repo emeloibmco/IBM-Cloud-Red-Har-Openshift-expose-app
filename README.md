@@ -82,6 +82,13 @@ tls:
 
 **Descripción**: Utilizado cuando necesitas tener un control más granular sobre las reglas de tráfico de red. Te permite definir subdominios, reglas de path y opciones avanzadas de red, ideales para aplicaciones más complejas.
 
+#### Crear Servicio
+
+```bash
+oc project <project_name>
+oc expose deployment <deployment_name> --name=<service_name> --port=<port_number> --target-port=<target_port_number>
+```
+
 #### Verificar Dominios Válidos del Clúster
 
 Abre la CLI de IBM Cloud y revisa los dominios válidos disponibles para tu clúster:
@@ -91,6 +98,7 @@ ibmcloud oc nlb-dns ls --cluster <cluster-id>
 ```
 
 **Aclaración**: Ingress te permite manejar múltiples rutas bajo un mismo dominio, lo que es útil si deseas exponer varias aplicaciones bajo diferentes paths o subdominios.
+
 
 ### Crear Ingress Resource
 
@@ -119,11 +127,15 @@ spec:
         pathType: Prefix
         backend:
           service:
-            name: <service_name>
+            name: <service-name>
             port:
-              number: 3001
+              number: <service-port>
 ```
+Aplica la configuración:
 
+```bash
+oc apply -f ingress.yaml
+```
 Doc oficial: [IBM Cloud Ingress](https://cloud.ibm.com/docs/openshift?topic=openshift-ingress-public-expose)
 
 **Ventajas de Ingress**:
@@ -163,9 +175,14 @@ spec:
   selector:
     <selector-key>: <selector-value>
   ports:
-    - protocol: TCP
+    - name: http
+      protocol: TCP
       port: 80      
-      targetPort: <target port>  
+      targetPort: <target port>
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 3001
   externalTrafficPolicy: Cluster 
 ```
 
@@ -192,3 +209,112 @@ Doc oficial: [IBM Cloud Load Balancer](https://cloud.ibm.com/docs/openshift?topi
 - **Route**: Ideal para aplicaciones pequeñas o rápidas que requieren acceso público sin necesidad de configuraciones avanzadas.
 - **Ingress**: Útil para aplicaciones más complejas que requieren gestionar múltiples rutas o dominios bajo un mismo clúster.
 - **Load Balancer**: La mejor opción para aplicaciones con grandes volúmenes de tráfico y que requieren alta disponibilidad y escalabilidad.
+
+#### Exponer Aplicación mediante load balancer aplicando SSL por ingress con CA por Secret Manager
+
+### Agregar persmisos sobre el secret group al access group
+
+![secret-permisos-1](https://github.com/user-attachments/assets/b8973ea2-21f0-4067-adc6-3479a4e0ac4c)
+
+![secret-permisos-2](https://github.com/user-attachments/assets/5be46d58-3bcc-4d87-803d-094ef443906c)
+
+### Agregar service-id para identificar el cluster al access group
+
+![access-group-1](https://github.com/user-attachments/assets/7f60cc44-04e4-416e-a75d-c8d963dfa1c3)
+
+![access-group-2](https://github.com/user-attachments/assets/c1dd98d3-2353-49ab-8ada-a3db16ccf822)
+
+### Crear autorización para el cluster sobre el secret manager
+
+![image](https://github.com/user-attachments/assets/f6b28846-c172-4b7b-9a0f-ea7c6c4a515d)
+
+![image](https://github.com/user-attachments/assets/2b93ae20-3d30-44dd-b4c6-08437fdb930b)
+
+![image](https://github.com/user-attachments/assets/52255f53-02c5-4b80-881d-8ae2f0a6f710)
+
+![image](https://github.com/user-attachments/assets/c35a2dd5-f932-4daf-86dc-9ccb01756151)
+
+### Vincular Secret Manager al cluster 
+
+Obtener id del secret manager.
+
+```sh
+ibmcloud resource service-instance <secret-manager-name>
+```
+
+Vincular Secret Manager al cluster
+
+```sh
+ibmcloud oc ingress instance register --cluster <cluster-id> --crn <secret-manager-crn> --is-default
+```
+
+Importar secret del certificado al cluster
+
+```sh
+	ibmcloud oc ingress secret create --cluster <cluster_name_or_ID> --cert-crn <crn> --name <secret_name> --namespace openshift-ingress
+```
+
+#### Crear Load Balancer
+
+Define un `LoadBalancer` en el archivo YAML:
+
+```yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodejsbasic-vpc-alb-dal-1
+  namespace: <namespace|project>
+  annotations:
+    service.beta.kubernetes.io/ibm-load-balancer-cloud-provider-enable-features: '{"public": "true"}'
+spec:
+  type: LoadBalancer
+  selector:
+    <selector-key>: <selector-value>
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80      
+      targetPort: <target port>
+    - name: https
+      protocol: TCP
+      port: 443
+      targetPort: 3001
+  externalTrafficPolicy: Cluster 
+```
+
+Aplica la configuración:
+
+```bash
+oc apply -f lb.yaml
+```
+
+#### Crear Ingress asociado al CA
+
+```yaml
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: nodejs-basic-ingress
+  namespace: <namespace|project>
+spec:
+  tls:
+  - hosts:
+      - <valid-domain|subdomain>
+    secretName: <cert-name>
+  rules:
+  - host: <valid-domain|subdomain>
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: <service_name>
+            port:
+              number: 443
+```
+Aplica la configuración:
+
+```bash
+oc apply -f ingress.yaml
+```

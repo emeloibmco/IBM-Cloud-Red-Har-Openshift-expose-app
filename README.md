@@ -229,7 +229,7 @@ Doc oficial: [IBM Cloud Load Balancer](https://cloud.ibm.com/docs/openshift?topi
 
 ### Vincular Secret Manager al cluster 
 
-Obtener id del secret manager.
+Obtener id del Secret Manager.
 
 ```sh
 ibmcloud resource service-instance <secret-manager-name>

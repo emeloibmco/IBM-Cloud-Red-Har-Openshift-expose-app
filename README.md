@@ -210,7 +210,7 @@ Doc oficial: [IBM Cloud Load Balancer](https://cloud.ibm.com/docs/openshift?topi
 - **Ingress**: Útil para aplicaciones más complejas que requieren gestionar múltiples rutas o dominios bajo un mismo clúster.
 - **Load Balancer**: La mejor opción para aplicaciones con grandes volúmenes de tráfico y que requieren alta disponibilidad y escalabilidad.
 
-#### Exponer Aplicación mediante load balancer aplicando SSL por ingress con CA por Secret Manager
+## Exponer Aplicación mediante load balancer aplicando SSL por ingress con CA por Secret Manager
 
 ### Agregar persmisos sobre el secret group al access group
 

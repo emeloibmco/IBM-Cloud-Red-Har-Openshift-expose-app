@@ -12,7 +12,7 @@
 5. [Load Balancer](#load-balancer)
 6. [Exponer Aplicación mediante load balancer aplicando SSL por ingress con CA por Secret Manager](#exponer-aplicación-mediante-load-balancer-aplicando-ssl-por-ingress-con-ca-en-secret-manager)
 6. [Ibm Cloud dns services](#Ibm-Cloud-dns-services)
-
+7. [Comparación de Métodos de Exposición](#Comparación-de-Métodos-de-Exposición)
 
 ## Crear Nuevo Proyecto
 

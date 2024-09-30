@@ -11,6 +11,7 @@
    - [Crear Ingress Resource](#crear-ingress-resource)
 5. [Load Balancer](#load-balancer)
 6. [Exponer Aplicación mediante load balancer aplicando SSL por ingress con CA por Secret Manager](#exponer-aplicación-mediante-load-balancer-aplicando-ssl-por-ingress-con-ca-en-secret-manager)
+6. [Ibm Cloud dns services](#Ibm-Cloud-dns-services)
 
 
 ## Crear Nuevo Proyecto
@@ -312,6 +313,64 @@ Aplica la configuración:
 oc apply -f ingress.yaml
 ```
 ---
+## IBM Cloud DNS Services
+
+IBM Cloud DNS Services es un servicio de infraestructura en la nube que permite gestionar nombres de dominio (DNS) de manera privada dentro de redes VPC (Virtual Private Cloud) en IBM Cloud. Ofrece una solución confiable y segura para administrar registros DNS y resolver nombres de dominio, mejorando la seguridad y control sobre el acceso a los recursos de la red.
+
+### Crear una instancia de DNS Services
+
+Para comenzar a utilizar el servicio de DNS, primero debes crear una instancia de DNS Services en IBM Cloud. Este servicio te permitirá gestionar zonas DNS privadas dentro de tu VPC.
+
+![image](https://github.com/user-attachments/assets/818f1432-20f4-464d-aea5-c014e8bc4c9b)
+
+### Crear una zona DNS
+
+Una **zona DNS** es un contenedor que agrupa registros DNS y define un espacio de nombres para los dominios. Las zonas DNS privadas creadas en IBM Cloud solo son accesibles desde las redes VPC permitidas, garantizando que los registros DNS no sean visibles desde Internet público, lo que mejora la seguridad y privacidad.
+
+Pasos para crear una zona DNS privada:
+
+1. Accede a tu instancia de DNS Services.
+2. Crea una nueva zona DNS y define el nombre del dominio.
+3. Configura la red VPC donde esta zona será accesible.
+
+![image](https://github.com/user-attachments/assets/8de9a0a8-7ee3-4222-944d-ddba6cb4902d)
+
+![image](https://github.com/user-attachments/assets/52456cbd-e2ce-4fb2-8488-e280b30b0a3d)
+
+### Crear un registro CNAME
+
+Dentro de tu zona DNS, puedes crear registros DNS que resuelvan diferentes subdominios. Un **registro CNAME** permite crear un alias para otro dominio. En este caso, crearemos un subdominio que apunte a un recurso expuesto dentro del clúster, como una aplicación.
+
+Pasos para crear un registro CNAME:
+
+1. Accede a tu zona DNS.
+2. Crea un nuevo registro CNAME.
+3. Introduce el subdominio y el dominio al cual debe apuntar.
+
+![image](https://github.com/user-attachments/assets/d70757e8-8f3a-4886-893e-39905b6226fd)
+
+![image](https://github.com/user-attachments/assets/445d15de-4a17-40b4-997f-cc579f6f5665)
+
+### Añadir redes a la zona DNS
+
+Para que los registros dentro de la zona DNS sean accesibles desde tu red, debes asociar la VPC o red donde se encuentra tu clúster o instancias VSI (Virtual Server Instances). Esto permitirá que las solicitudes DNS se resuelvan correctamente desde las redes internas.
+
+![image](https://github.com/user-attachments/assets/692a3d37-852a-4fe9-90da-8ad323903051)
+
+### Test de resolución de dominios
+
+Una vez que hayas configurado tu zona DNS y los registros, es importante probar la resolución de dominios desde uno de los nodos de tu clúster o desde alguna VSI dentro de la red asociada.
+
+Pasos para probar la resolución DNS:
+
+1. Accede a una instancia o nodo dentro de la red VPC.
+2. Usa herramientas como `nslookup` o `dig` para comprobar la resolución de los nombres de dominio configurados.
+
+![image](https://github.com/user-attachments/assets/4696c6d5-3f3c-4713-abc7-1511d03d0880)
+
+![image](https://github.com/user-attachments/assets/5531df0f-de34-4e53-9e89-f27ba07b79b7)
+
+![image](https://github.com/user-attachments/assets/1fa35f30-6442-41be-a7f1-3bc3575d1ff9)
 
 ## Comparación de Métodos de Exposición
 
